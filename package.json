@@ -1,0 +1,36 @@
+{
+  "name": "cryptopia-node",
+  "version": "0.0.1",
+  "description": "Cryptopia API Client for Node.js",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^4.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjezorek/cryptopia-node.git"
+  },
+  "keywords": [
+    "crytopcurrency",
+    "cryptopia",
+    "bitcoin",
+    "altcoin",
+    "exchange"
+  ],
+  "author": "Matt Jezorek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjezorek/cryptopia-node/issues"
+  },
+  "homepage": "https://github.com/mjezorek/cryptopia-node#readme"
+}
