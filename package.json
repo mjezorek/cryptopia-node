@@ -1,6 +1,6 @@
 {
   "name": "cryptopia-node",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cryptopia API Client for Node.js",
   "main": "index.js",
   "directories": {
