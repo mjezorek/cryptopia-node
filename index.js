@@ -6,7 +6,8 @@ var packageInfo = require('./package.json');
 var url = require('url');
 var urlencode = require('urlencode');
 
-var Cryptopia = function(key, secret) {
+var Cryptopia = function(key, secret, verbose) {
+	this.verbose = verbose || false;
 	this.version = "0.0.1";
 	this.key = key;
 	this.secret = secret;
@@ -50,7 +51,7 @@ Cryptopia.prototype.getmarket = function(market, callback) {
 }
 
 Cryptopia.prototype.getmarkets = function(callback) {
-	var options = {};	
+	var options = {};
 	this.pubRequest('GetMarkets', options, function(err, data) {
 		if(data) {
 			return callback(err, data);
@@ -131,7 +132,6 @@ Cryptopia.prototype.gettransactions = function(type, callback) {
 Cryptopia.prototype.submittrade = function(market, type, rate, amount, callback) {
 	var params = {'Market':  market, 'Type': type, 'Rate': rate, 'Amount': amount };
 	this.privateRequest("SubmitTrade", params, function(err, data) {
-		console.log(data);
 		if(data) {
 			return callback(err, data);
 		}
@@ -152,6 +152,7 @@ Cryptopia.prototype.pubRequest = function(method, params, callback) {
 	var options = {
 		host: this.host,
 		path: this.uri + method,
+		verboe: this.verbose,
 		headers: {
 			'User-Agent': this.userAgent
 		}
@@ -160,6 +161,7 @@ Cryptopia.prototype.pubRequest = function(method, params, callback) {
 		var str = '';
 		response.on('data', function (chunk) {
 			str += chunk;
+			if (options.verbose) console.log(str);
 		});
 		response.on('end', function () {
 			return callback(null, JSON.parse(str));
@@ -177,6 +179,7 @@ Cryptopia.prototype.privateRequest = function(method, params, callback) {
 	var options = {
 		host: this.host,
 		path: this.uri + method,
+		verbose: this.verbose,
 		method: 'POST',
 		headers: {
 			'User-Agent': this.userAgent,
@@ -188,7 +191,7 @@ Cryptopia.prototype.privateRequest = function(method, params, callback) {
 		var str = '';
 		response.on('data', function (chunk) {
 			str += chunk;
-			console.log(str);
+			if (options.verbose) console.log(str);
 		});
 		response.on('end', function () {
 			return callback(null, JSON.parse(str));
