@@ -152,7 +152,7 @@ Cryptopia.prototype.pubRequest = function(method, params, callback) {
 	var options = {
 		host: this.host,
 		path: this.uri + method,
-		verboe: this.verbose,
+		verbose: this.verbose,
 		headers: {
 			'User-Agent': this.userAgent
 		}
