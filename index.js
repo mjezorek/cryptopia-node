@@ -171,7 +171,7 @@ Cryptopia.prototype.pubRequest = function(method, params, callback) {
 };
 
 Cryptopia.prototype.privateRequest = function(method, params, callback) {
-	var nonce = Math.floor(new Date().getTime() / 1000);
+	var nonce = Math.floor(new Date().getTime());
 	var md5 = crypto.createHash('md5').update( JSON.stringify( params ) ).digest();
 	var requestContentBase64String = md5.toString('base64');
 	var signature = this.key + "POST" + encodeURIComponent( this.baseURL + "/" + method).toLowerCase() + nonce + requestContentBase64String;
