@@ -184,7 +184,8 @@ Cryptopia.prototype.privateRequest = function(method, params, callback) {
 		headers: {
 			'User-Agent': this.userAgent,
 			'Content-Type':'application/json; charset=utf-8',
-			'Authorization': "amx " + this.key + ":" + hmac + ":" + nonce
+			'Authorization': "amx " + this.key + ":" + hmac + ":" + nonce,
+			'Content-Length': Buffer.byteLength(JSON.stringify(params))
 		}
 	}
 	cb = function(response) {
