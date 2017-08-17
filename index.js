@@ -136,7 +136,14 @@ Cryptopia.prototype.pubRequest = function(method, params, callback) {
 			if (options.verbose) console.log(str);
 		});
 		response.on('end', function () {
-			return callback(null, JSON.parse(str));
+			var objFromJSON;
+			try {
+				objFromJSON = JSON.parse(str);
+				return callback(null, objFromJSON);
+			}
+			catch (err) {
+				return callback(err, null);
+			}
 		});
 	}
 	var req = https.request(options, cb);
@@ -172,7 +179,14 @@ Cryptopia.prototype.privateRequest = function(method, params, callback) {
 			if (options.verbose) console.log(str);
 		});
 		response.on('end', function () {
-			return callback(null, JSON.parse(str));
+			var objFromJSON;
+			try {
+				objFromJSON = JSON.parse(str);
+				return callback(null, objFromJSON);
+			}
+			catch (err) {
+				return callback(err, null);
+			}
 		});
 	}
 	var req = https.request(options, cb);
