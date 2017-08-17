@@ -28,103 +28,79 @@ var Cryptopia = function(key, secret, verbose) {
 
 Cryptopia.prototype.getcurrencies = function(callback) {
 	this.pubRequest('GetCurrencies', {}, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 }
 
 Cryptopia.prototype.gettradepairs = function(callback) {
 	this.pubRequest('GetTradePairs', {}, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 }
 
 Cryptopia.prototype.getmarket = function(market, callback) {
 	this.pubRequest('GetMarket/' + market, {}, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 }
 
 Cryptopia.prototype.getmarkets = function(callback) {
 	var options = {};
 	this.pubRequest('GetMarkets', options, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
 Cryptopia.prototype.getmarkethistory = function(market, hours, callback) {
 	this.pubRequest('GetMarketHistory/' + market + "/" + hours, {}, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 }
 
 Cryptopia.prototype.getmarketorders = function(market, count, callback) {
 	this.pubRequest('GetMarketOrders/' + market + "/" + count, {}, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 }
 
 Cryptopia.prototype.getmarketordergroups = function(market, count, callback) {
 	this.pubRequest('GetMarketOrderGroups/' + market + "/" + count, {}, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 }
 //Private
 Cryptopia.prototype.getbalance = function(market, callback) {
 	var params = {'Currency':  market };
 	this.privateRequest("GetBalance", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
 Cryptopia.prototype.getdepositaddress = function(market, callback) {
 	var params = {'Currency':  market };
 	this.privateRequest("GetDepositAddress", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
 Cryptopia.prototype.getopenorders = function(market, callback) {
 	var params = {'Market':  market };
 	this.privateRequest("GetOpenOrders", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
 Cryptopia.prototype.gettradehistory = function(market, callback) {
 	var params = {'Market':  market };
 	this.privateRequest("GetTradeHistory", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
 Cryptopia.prototype.gettransactions = function(type, callback) {
 	var params = {'Type':  type };
 	this.privateRequest("GetTransactions", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
@@ -132,18 +108,14 @@ Cryptopia.prototype.gettransactions = function(type, callback) {
 Cryptopia.prototype.submittrade = function(market, type, rate, amount, callback) {
 	var params = {'Market':  market, 'Type': type, 'Rate': rate, 'Amount': amount };
 	this.privateRequest("SubmitTrade", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
 Cryptopia.prototype.canceltrade = function(type, order, callback) {
 	var params = {'Type':  type, 'OrderId': order };
 	this.privateRequest("CancelTrade", params, function(err, data) {
-		if(data) {
-			return callback(err, data);
-		}
+		return callback(err, data);
 	});
 };
 
@@ -164,11 +136,23 @@ Cryptopia.prototype.pubRequest = function(method, params, callback) {
 			if (options.verbose) console.log(str);
 		});
 		response.on('end', function () {
-			return callback(null, JSON.parse(str));
+			var objFromJSON;
+			try {
+				objFromJSON = JSON.parse(str);
+				return callback(null, objFromJSON);
+			}
+			catch (err) {
+				return callback(err, null);
+			}
 		});
 	}
-	https.request(options, cb).end();
+	var req = https.request(options, cb);
+	req.on('error', function(err) {
+		callback(err, null);
+	});
+	req.end();
 };
+
 
 Cryptopia.prototype.privateRequest = function(method, params, callback) {
 	var nonce = Math.floor(new Date().getTime());
@@ -195,10 +179,20 @@ Cryptopia.prototype.privateRequest = function(method, params, callback) {
 			if (options.verbose) console.log(str);
 		});
 		response.on('end', function () {
-			return callback(null, JSON.parse(str));
+			var objFromJSON;
+			try {
+				objFromJSON = JSON.parse(str);
+				return callback(null, objFromJSON);
+			}
+			catch (err) {
+				return callback(err, null);
+			}
 		});
 	}
 	var req = https.request(options, cb);
+	req.on('error', function(err) {
+		callback(err, null);
+	});
 	req.write( JSON.stringify( params ) );
 	req.end();
 };
